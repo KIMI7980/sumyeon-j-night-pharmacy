@@ -1,0 +1,17 @@
+# 인증키 (절대 올리지 않음)
+.env
+
+# 파이썬 실행 부산물
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 코드로 다시 만들 수 있는 결과물
+data/processed/
+
+# 운영체제·편집기 파일
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
