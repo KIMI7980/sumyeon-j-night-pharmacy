@@ -45,4 +45,8 @@ python src/clean.py
 2. `.env.example`을 복사해 `.env`를 만들고 `PHARMACY_API_KEY=`에 키 입력
 3. `python src/collect.py`
 
+`collect.py`는 `data/raw/pharmacy_seoul_raw.csv`(2026-11-19 기준 파일)를 덮어씁니다.
+새로 받으면 약국 수가 달라져 건수 검증표의 숫자(5,462 / 208 / 46)와 맞지 않게 됩니다.
+기준 파일을 바꾸지 않으려면 실행하지 마세요.
+
 `.env`는 GitHub에 올리지 않습니다.
