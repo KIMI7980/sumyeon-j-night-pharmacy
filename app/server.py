@@ -17,9 +17,14 @@ RATE_SCALE = 100_000
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    raw = pd.read_csv(ROOT / RAW, dtype=str, encoding="utf-8-sig")
+    raw_path, pop_path = ROOT / RAW, ROOT / POP
+    app.state.is_sample = not (raw_path.is_file() and pop_path.is_file())
+    if app.state.is_sample:
+        sample_dir = ROOT / "data" / "sample"
+        raw_path, pop_path = sample_dir / raw_path.name, sample_dir / pop_path.name
+    raw = pd.read_csv(raw_path, dtype=str, encoding="utf-8-sig")
     app.state.pharmacies, _ = clean_pharmacy(raw)
-    app.state.population = pd.read_csv(ROOT / POP, encoding="utf-8-sig").rename(
+    app.state.population = pd.read_csv(pop_path, encoding="utf-8-sig").rename(
         columns={"자치구": "gu"}
     )
     yield
@@ -77,6 +82,7 @@ def night_pharmacies(
     seoul_rate = len(all_matches) / int(population[population_column].sum()) * RATE_SCALE
     response = {
         "count": len(matches),
+        "is_sample": request.app.state.is_sample,
         "population_base": population_base,
         "seoul_per_100k": round(seoul_rate, 2),
         "districts": [],

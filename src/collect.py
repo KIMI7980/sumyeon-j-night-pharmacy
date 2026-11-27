@@ -3,7 +3,7 @@
 사용법:
     python collect.py
 결과:
-    data/raw/pharmacy_seoul_raw.csv   약국 1곳 = 1행 (API 응답 그대로)
+    data/raw/pharmacy_seoul_raw_YYYYMMDD_HHMMSS.csv   약국 1곳 = 1행 (API 응답 그대로)
     data/raw/collect_log.csv          구별 API 총건수 vs 실제 수집 건수 (건수 검증표용)
 """
 import csv
@@ -81,8 +81,9 @@ def main():
         print(f"{gu:5} API 총건수 {total:4} / 수집 {len(items):4}  {status}")
         time.sleep(0.3)
 
-    raw_path = os.path.join(OUT_DIR, "pharmacy_seoul_raw.csv")
-    with open(raw_path, "w", encoding="utf-8-sig", newline="") as f:
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    raw_path = os.path.join(OUT_DIR, f"pharmacy_seoul_raw_{timestamp}.csv")
+    with open(raw_path, "x", encoding="utf-8-sig", newline="") as f:
         w = csv.DictWriter(f, fieldnames=COLUMNS)
         w.writeheader()
         w.writerows(all_rows)
